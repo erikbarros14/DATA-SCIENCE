@@ -1,0 +1,112 @@
+Documentação do Projeto: API de Classificação de Câncer de Mama
+
+🛠️ Tecnologias Utilizadas
+Python 3.10
+
+FastAPI (Framework para construção da API)
+
+Scikit-learn (Modelos de machine learning)
+
+Joblib (Serialização dos modelos)
+
+Requests (Testes da API)
+
+Uvicorn (Servidor ASGI)
+
+📊 Análise e Seleção de Modelos
+Dataset
+569 amostras (212 malignas, 357 benignas)
+
+30 características núcleo celular (média, erro padrão e pior caso)
+
+Nenhum valor faltante (como verificado na análise)
+
+Modelos Avaliados
+Modelo	Acurácia	Precisão	Recall	F1-Score	Tempo Treino (s)	Tempo Inferência (ms)	Tamanho (KB)
+SVM	98.25%	98.29%	98.25%	98.24%	0.012	1.24	28.0
+Random Forest	96.49%	96.52%	96.49%	96.47%	0.130	3.43	317.7
+🔍 Justificativa da Escolha
+O SVM (Support Vector Machine) foi selecionado como modelo final devido a:
+
+Maior acurácia (98.25% vs 96.49%)
+
+Inferência mais rápida (1.24ms vs 3.43ms)
+
+Modelo mais compacto (28KB vs 318KB)
+
+Melhor generalização em dados não vistos
+
+O Random Forest, apesar de ser um modelo robusto, apresentou:
+
+Maior complexidade computacional
+
+Tempos de inferência mais longos
+
+Tendência a overfitting com muitas features
+
+🚀 Implementação da API
+Estrutura de Arquivos
+Copy
+.
+├── api.py               # Implementação da API
+├── best_model.pkl       # Modelo SVM treinado
+├── scaler.pkl           # Pré-processador
+├── label_encoder.pkl    # Codificador de labels
+├── train_model.py       # Script de treinamento
+├── test_api.py          # Testes da API
+└── requirements.txt     # Dependências
+Endpoints
+POST /predict - Recebe features e retorna classificação
+
+json
+Copy
+{
+  "features": [17.99, 10.38, 122.8, ...]
+}
+GET / - Verificação de saúde da API
+
+🔧 Como Executar
+Instalação:
+
+bash
+Copy
+python -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+pip install -r requirements.txt
+Treinamento (opcional):
+
+bash
+Copy
+python train_model.py
+Iniciar API:
+
+bash
+Copy
+python api.py
+Testar:
+
+bash
+Copy
+python test_api.py
+# Ou via curl:
+curl -X POST "http://localhost:8000/predict" -H "Content-Type: application/json" -d '{"features": [...]}'
+🎯 Métricas de Desempenho
+Métrica	Valor Alvo	Valor Obtido
+Acurácia	> 95%	98.25%
+Tempo de Inferência	< 100ms	~1.24ms
+Disponibilidade	100%	100%
+📌 Considerações para Produção
+Escalabilidade: Adicionar balanceamento de carga para múltiplas requisições
+
+Monitoramento: Implementar logs e métricas de desempenho
+
+Segurança: Adicionar autenticação e validação de inputs
+
+Versionamento: Manter múltiplas versões do modelo
+
+📚 Referências
+UCI Machine Learning Repository
+
+Documentação FastAPI
+
+Scikit-learn Documentation
